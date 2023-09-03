@@ -2,6 +2,38 @@
 
 <head>
     <title>Minesweeper</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 15% auto;
+            padding: 20px;
+            width: 50%;
+            background-color: #fefefe;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,12 +45,19 @@
         <p>・白パネルの上下左右に移動できます</p>
 
     </div>
-
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModalBtn" class="close">&times;</span>
+            <iframe id="screen" width="560" height="315" src="" title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+        </div>
+    </div>
     <div style="overflow-x: scroll; width: 3000px;">
         <table id="board" style="text-align: center;"></table>
     </div>
     <button onclick="ResetGame()">リセット</button>
-    <div id="screen"></div>
+
     <script>
         // ボード用の配列を作成
         let startY = Math.floor(Math.random() * 100);
@@ -174,11 +213,17 @@
                     || y == goalY + 1 && x == goalX
                     || y == goalY && x == goalX - 1
                     || y == goalY && x == goalX + 1) {
-                    let screen = document.getElementById("screen");
-                    screen.innerText = "ゲームクリア次のステージに進む";
+                    document.getElementById('videoModal').style.display = "block";
+                    let screen = document.getElementById('screen');
+                    screen.src = "https://www.youtube.com/embed/I1NElpKjm74?autoplay=1&si=mNK16aS89brWMhED&amp;start=10";
+                    // 再生させたい動画のURLを指定
                 }
             }
         }
+
+        document.getElementById('closeModalBtn').addEventListener('click', function () {
+            document.getElementById('videoModal').style.display = "none";
+        });
     </script>
 </body>
 
