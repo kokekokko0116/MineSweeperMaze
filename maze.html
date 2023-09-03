@@ -1,0 +1,185 @@
+<html>
+
+<head>
+    <title>Minesweeper</title>
+</head>
+
+<body>
+    <h1>New Super マインスイーパー（本気）</h1>
+    <div>
+        <p>爆弾を避けてゴールを目指すゲームです！</p>
+        <p>・「S」はスタート「G」がゴールです</p>
+        <p>・パネルの数字はその周囲８マスにある爆弾の数を示してます</p>
+        <p>・白パネルの上下左右に移動できます</p>
+
+    </div>
+
+    <div style="overflow-x: scroll; width: 3000px;">
+        <table id="board" style="text-align: center;"></table>
+    </div>
+    <button onclick="ResetGame()">リセット</button>
+    <div id="screen"></div>
+    <script>
+        // ボード用の配列を作成
+        let startY = Math.floor(Math.random() * 100);
+        let startX = Math.floor(Math.random() * 100);
+        let goalY = Math.floor(Math.random() * 100);
+        let goalX = Math.floor(Math.random() * 100);
+
+        let board = [];
+        for (let y = 0; y < 100; y++) {
+            board[y] = [];
+            for (let x = 0; x < 100; x++) {
+                if (y == startY && x == startX) {
+                    board[y][x] = 1;
+                } else if (y == goalY && x == goalX) {
+                    board[y][x] = 2;
+                } else {
+                    board[y][x] = 0;
+                }
+            }
+        }
+
+        // 爆弾の位置をランダムに決める処理
+        let mines = [];
+        for (let y = 0; y < 100; y++) {
+            mines[y] = [];
+            for (let x = 0; x < 100; x++) {
+                if (board[y][x] == 1) {
+                    mines[y][x] = 0;
+                }
+                else {
+                    rand = Math.floor(Math.random() * 100);
+                    if (rand < 18) {
+                        mines[y][x] = 1;
+                    } else {
+                        mines[y][x] = 0;
+                    }
+                }
+            }
+        }
+
+        // 周りの爆弾の数を数える処理
+        let minesAround = [];
+        for (let y = 0; y < 100; y++) {
+            minesAround[y] = [];
+            for (let x = 0; x < 100; x++) {
+                let counter = 0;
+                if (y != 0 && x != 0) counter += mines[y - 1][x - 1]; // 左上
+                if (y != 0) counter += mines[y - 1][x]; // 上
+                if (y != 0 && x != 99) counter += mines[y - 1][x + 1]; // 右上
+                if (x != 0) counter += mines[y][x - 1]; // 左
+                if (x != 99) counter += mines[y][x + 1]; // 右
+                if (y != 99 && x != 0) counter += mines[y + 1][x - 1]; // 左下
+                if (y != 99) counter += mines[y + 1][x]; // 下
+                if (y != 99 && x != 99) counter += mines[y + 1][x + 1]; // 右下
+                minesAround[y][x] = counter;
+            }
+        }
+
+        // ボードを生成する処理
+        let BoardTable = document.getElementById("board");
+        for (let y = 0; y < 100; y++) {
+            let tr = document.createElement("tr");
+            for (let x = 0; x < 100; x++) {
+                let td = document.createElement("td");
+                td.style.width = "30px";
+                td.style.height = "30px";
+                td.style.border = "solid 1px black";
+                td.id = y + '-' + x;
+                if (board[y][x] == 1) {
+                    td.style.backgroundColor = "white";
+                    td.innerText = "S";
+                } else if (board[y][x] == 2) {
+                    td.style.backgroundColor = "white";
+                    td.innerText = "G";
+                } else {
+                    td.style.backgroundColor = "silver";
+                }
+                // 生成
+                tr.appendChild(td);
+            }
+            BoardTable.appendChild(tr);
+        }
+        console.log(mines);
+
+        showCounter(startY, startX);
+        function showCounter(y, x) {
+            let counter = 0;
+            if (board[y][x] == 1) {
+                if (y != 0 && x != 0) {
+                    let td = document.getElementById((y - 1) + '-' + (x - 1));
+                    td.innerText = minesAround[y - 1][x - 1];
+                }
+                if (y != 0) {
+                    let td = document.getElementById((y - 1) + '-' + (x));
+                    td.innerText = minesAround[y - 1][x];
+                    td.onclick = function () {
+                        ClickPanel(y - 1, x);
+                    };
+                    td.style.cursor = "pointer";
+                }
+                if (y != 0 && x != 99) {
+                    let td = document.getElementById((y - 1) + '-' + (x + 1));
+                    td.innerText = minesAround[y - 1][x + 1];
+                }
+                if (x != 0) {
+                    let td = document.getElementById((y) + '-' + (x - 1));
+                    td.innerText = minesAround[y][x - 1];
+                    td.onclick = function () {
+                        ClickPanel(y, x - 1);
+                    };
+                    td.style.cursor = "pointer";
+                }
+                if (x != 99) {
+                    let td = document.getElementById((y) + '-' + (x + 1));
+                    td.innerText = minesAround[y][x + 1];
+                    td.onclick = function () {
+                        ClickPanel(y, x + 1);
+                    };
+                    td.style.cursor = "pointer";
+                }
+                if (y != 99 && x != 0) {
+                    let td = document.getElementById((y + 1) + '-' + (x - 1));
+                    td.innerText = minesAround[y + 1][x - 1];
+                }
+                if (y != 99) {
+                    let td = document.getElementById((y + 1) + '-' + (x));
+                    td.innerText = minesAround[y + 1][x];
+                    td.onclick = function () {
+                        ClickPanel(y + 1, x);
+                    };
+                    td.style.cursor = "pointer";
+                }
+                if (y != 99 && x != 99) {
+                    let td = document.getElementById((y + 1) + '-' + (x + 1));
+                    td.innerText = minesAround[y + 1][x + 1];
+                }
+            }
+        }
+        function ResetGame() {
+            location.reload();
+        }
+        function ClickPanel(y, x) {
+            board[y][x] = 1;
+            let td = document.getElementById(y + '-' + x);
+            td.style.backgroundColor = "white";
+            if (mines[y][x] == 1) {
+                td.innerText = "爆";
+                alert("ゲームオーバー");
+            } else {
+                td.innerText = '';
+                showCounter(y, x);
+                if (y == goalY - 1 && x == goalX
+                    || y == goalY + 1 && x == goalX
+                    || y == goalY && x == goalX - 1
+                    || y == goalY && x == goalX + 1) {
+                    let screen = document.getElementById("screen");
+                    screen.innerText = "ゲームクリア次のステージに進む";
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
