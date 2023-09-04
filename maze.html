@@ -43,12 +43,13 @@
         <p>・「S」はスタート「G」がゴールです</p>
         <p>・パネルの数字はその周囲８マスにある爆弾の数を示してます</p>
         <p>・白パネルの上下左右に移動できます</p>
+        <p>・ゲームクリア ゲームオーバーの際に音が出ますのでご注意ください</p>
 
     </div>
     <div id="videoModal" class="modal">
         <div class="modal-content">
             <span id="closeModalBtn" class="close">&times;</span>
-            <iframe id="screen" width="560" height="315" src="" title="YouTube video player" frameborder="0"
+            <iframe id="screen" width="80%" height="80%" src="" title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen></iframe>
         </div>
@@ -205,7 +206,10 @@
             td.style.backgroundColor = "white";
             if (mines[y][x] == 1) {
                 td.innerText = "爆";
-                alert("ゲームオーバー");
+                document.getElementById('videoModal').style.display = "block";
+                let screen = document.getElementById('screen');
+                screen.src = "https://www.youtube.com/embed/Sbki9gGbX1o?autoplay=1";
+
             } else {
                 td.innerText = '';
                 showCounter(y, x);
