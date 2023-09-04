@@ -43,7 +43,7 @@
     <h1>New Super マインスイーパー（本気）</h1>
     <div>
         <p>爆弾を避けてゴールを目指すゲームです！</p>
-        <p>・「S」はスタート「G」がゴールです</p>
+        <p>・「S」はスタート(左上)「G」がゴール（右下）です</p>
         <p>・パネルの数字はその周囲８マスにある爆弾の数を示してます</p>
         <p>・白パネルの上下左右に移動できます</p>
         <p>・ゲームクリア ゲームオーバーの際に音が出ますのでご注意ください</p>
@@ -64,10 +64,11 @@
 
     <script>
         // ボード用の配列を作成
-        let startY = Math.floor(Math.random() * 100);
-        let startX = Math.floor(Math.random() * 100);
-        let goalY = Math.floor(Math.random() * 100);
-        let goalX = Math.floor(Math.random() * 100);
+        let startY = Math.floor(Math.random() * 20);
+        let startX = Math.floor(Math.random() * 20);
+        // 80~100のランダムな数値を生成
+        let goalY = Math.floor(Math.random() * 20) + 80;
+        let goalX = Math.floor(Math.random() * 20) + 80;
 
         let board = [];
         for (let y = 0; y < 100; y++) {
