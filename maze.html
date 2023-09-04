@@ -139,6 +139,15 @@
                     td.innerText = "G";
                 } else {
                     td.style.backgroundColor = "silver";
+                    // contextmenuイベント y x を取得
+                    td.addEventListener('contextmenu', function (e) {
+                        e.preventDefault();
+                        if (td.innerText == "💣") {
+                            td.innerText = "";
+                        } else {
+                            td.innerText = "💣";
+                        }
+                    });
                 }
                 // 生成
                 tr.appendChild(td);
@@ -150,55 +159,53 @@
         showCounter(startY, startX);
         function showCounter(y, x) {
             let counter = 0;
-            if (board[y][x] == 1) {
-                if (y != 0 && x != 0) {
-                    let td = document.getElementById((y - 1) + '-' + (x - 1));
-                    td.innerText = minesAround[y - 1][x - 1];
-                }
-                if (y != 0) {
-                    let td = document.getElementById((y - 1) + '-' + (x));
-                    td.innerText = minesAround[y - 1][x];
-                    td.onclick = function () {
-                        ClickPanel(y - 1, x);
-                    };
-                    td.style.cursor = "pointer";
-                }
-                if (y != 0 && x != 99) {
-                    let td = document.getElementById((y - 1) + '-' + (x + 1));
-                    td.innerText = minesAround[y - 1][x + 1];
-                }
-                if (x != 0) {
-                    let td = document.getElementById((y) + '-' + (x - 1));
-                    td.innerText = minesAround[y][x - 1];
-                    td.onclick = function () {
-                        ClickPanel(y, x - 1);
-                    };
-                    td.style.cursor = "pointer";
-                }
-                if (x != 99) {
-                    let td = document.getElementById((y) + '-' + (x + 1));
-                    td.innerText = minesAround[y][x + 1];
-                    td.onclick = function () {
-                        ClickPanel(y, x + 1);
-                    };
-                    td.style.cursor = "pointer";
-                }
-                if (y != 99 && x != 0) {
-                    let td = document.getElementById((y + 1) + '-' + (x - 1));
-                    td.innerText = minesAround[y + 1][x - 1];
-                }
-                if (y != 99) {
-                    let td = document.getElementById((y + 1) + '-' + (x));
-                    td.innerText = minesAround[y + 1][x];
-                    td.onclick = function () {
-                        ClickPanel(y + 1, x);
-                    };
-                    td.style.cursor = "pointer";
-                }
-                if (y != 99 && x != 99) {
-                    let td = document.getElementById((y + 1) + '-' + (x + 1));
-                    td.innerText = minesAround[y + 1][x + 1];
-                }
+            if (y != 0 && x != 0) {
+                let td = document.getElementById((y - 1) + '-' + (x - 1));
+                if (td.innerText != "💣" && td.innerText != "G") td.innerText = minesAround[y - 1][x - 1];
+            }
+            if (y != 0) {
+                let td = document.getElementById((y - 1) + '-' + (x));
+                if (td.innerText != "💣" && td.innerText != "G") td.innerText = minesAround[y - 1][x];
+                td.onclick = function () {
+                    ClickPanel(y - 1, x);
+                };
+                td.style.cursor = "pointer";
+            }
+            if (y != 0 && x != 99) {
+                let td = document.getElementById((y - 1) + '-' + (x + 1));
+                if (td.innerText != "💣" && td.innerText != "G") td.innerText = minesAround[y - 1][x + 1];
+            }
+            if (x != 0) {
+                let td = document.getElementById((y) + '-' + (x - 1));
+                if (td.innerText != "💣" && td.innerText != "G") td.innerText = minesAround[y][x - 1];
+                td.onclick = function () {
+                    ClickPanel(y, x - 1);
+                };
+                td.style.cursor = "pointer";
+            }
+            if (x != 99) {
+                let td = document.getElementById((y) + '-' + (x + 1));
+                if (td.innerText != "💣" && td.innerText != "G") td.innerText = minesAround[y][x + 1];
+                td.onclick = function () {
+                    ClickPanel(y, x + 1);
+                };
+                td.style.cursor = "pointer";
+            }
+            if (y != 99 && x != 0) {
+                let td = document.getElementById((y + 1) + '-' + (x - 1));
+                if (td.innerText != "💣" && td.innerText != "G") td.innerText = minesAround[y + 1][x - 1];
+            }
+            if (y != 99) {
+                let td = document.getElementById((y + 1) + '-' + (x));
+                if (td.innerText != "💣" && td.innerText != "G") td.innerText = minesAround[y + 1][x];
+                td.onclick = function () {
+                    ClickPanel(y + 1, x);
+                };
+                td.style.cursor = "pointer";
+            }
+            if (y != 99 && x != 99) {
+                let td = document.getElementById((y + 1) + '-' + (x + 1));
+                if (td.innerText != "💣" && td.innerText != "G") td.innerText = minesAround[y + 1][x + 1];
             }
         }
         function ResetGame() {
@@ -213,9 +220,7 @@
                 document.getElementById('videoModal').style.display = "block";
                 let screen = document.getElementById('screen');
                 screen.src = "https://www.youtube.com/embed/Sbki9gGbX1o?autoplay=1";
-
             } else {
-                td.innerText = '';
                 showCounter(y, x);
                 if (y == goalY - 1 && x == goalX
                     || y == goalY + 1 && x == goalX
@@ -234,6 +239,10 @@
             let screen = document.getElementById('screen');
             screen.src = "";
         });
+
+        // マーキング機能
+
+
     </script>
 </body>
 
