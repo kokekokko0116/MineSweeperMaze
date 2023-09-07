@@ -30,6 +30,27 @@
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
 
+        // ボードを生成する処理
+        let BoardTable = document.getElementById("board");
+        for (let y = 0; y < 9; y++) {
+            let tr = document.createElement("tr");
+            for (let x = 0; x < 9; x++) {
+                let td = document.createElement("td");
+                td.style.width = "50px";
+                td.style.height = "50px";
+                td.style.border = "solid 1px black";
+                td.id = y + '-' + x;
+                if (board[y][x] == 1) {
+                    td.style.backgroundColor = "white";
+                } else {
+                    td.style.backgroundColor = "silver";
+                }
+                // 生成
+                tr.appendChild(td);
+            }
+            BoardTable.appendChild(tr);
+        }
+
         // 爆弾の位置をランダムに決める処理
         let mines = [];
         for (let y = 0; y < 9; y++) {
@@ -55,39 +76,19 @@
             minesAround[y] = [];
             for (let x = 0; x < 9; x++) {
                 let counter = 0;
-                if (y != 0 && x != 0) counter += mines[y - 1][x - 1]; // 左上
-                if (y != 0) counter += mines[y - 1][x]; // 上
-                if (y != 0 && x != 8) counter += mines[y - 1][x + 1]; // 右上
-                if (x != 0) counter += mines[y][x - 1]; // 左
-                if (x != 8) counter += mines[y][x + 1]; // 右
-                if (y != 8 && x != 0) counter += mines[y + 1][x - 1]; // 左下
-                if (y != 8) counter += mines[y + 1][x]; // 下
-                if (y != 8 && x != 8) counter += mines[y + 1][x + 1]; // 右下
+                if (y != 0 && x != 0) counter += mines[y - 1][x - 1];   // 左上
+                if (y != 0) counter += mines[y - 1][x];                 // 上
+                if (y != 0 && x != 8) counter += mines[y - 1][x + 1];   // 右上
+                if (x != 0) counter += mines[y][x - 1];                 // 左
+                if (x != 8) counter += mines[y][x + 1];                 // 右
+                if (y != 8 && x != 0) counter += mines[y + 1][x - 1];   // 左下
+                if (y != 8) counter += mines[y + 1][x];                 // 下
+                if (y != 8 && x != 8) counter += mines[y + 1][x + 1];   // 右下
                 minesAround[y][x] = counter;
             }
         }
 
-        // ボードを生成する処理
-        let BoardTable = document.getElementById("board");
-        for (let y = 0; y < 9; y++) {
-            let tr = document.createElement("tr");
-            for (let x = 0; x < 9; x++) {
-                let td = document.createElement("td");
-                td.style.width = "50px";
-                td.style.height = "50px";
-                td.style.border = "solid 1px black";
-                td.id = y + '-' + x;
-                if (board[y][x] == 1) {
-                    td.style.backgroundColor = "white";
-                } else {
-                    td.style.backgroundColor = "silver";
-                }
-                // 生成
-                tr.appendChild(td);
-            }
-            BoardTable.appendChild(tr);
-        }
-        console.log(mines);
+
 
         showCounter(4, 4);
         function showCounter(y, x) {
